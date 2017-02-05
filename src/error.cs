@@ -9,7 +9,8 @@ namespace BatchX {
             string err =""; 
 			string[] codes = { 
 				"File size exceeds 4096 lines, please split into many files.", // 0
-				"Too few arguments provided. You must provide at least two arguments." // 1
+				"Too few arguments provided. You must provide at least two arguments.", 
+				"Encountered an improper"
 				};
             if ( errCode > -1 ) {
                 Console.Write("ERROR: " + codes[errCode] + "\r\n\r\n");

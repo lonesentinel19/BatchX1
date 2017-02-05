@@ -1,3 +1,17 @@
 	BATCHX 1.0 SPECIFICATION 
 		Drafted by lonesentinel19 
 		2/4/17
+
+I. Basic Replacements
+The following strings will have the former set of characters replaced with the latter
+set of characters, so long as the index of REM is not 0. In Spec 1.0 we will not check
+all indexes of a certain occurrence and ensure that it is to the left of an occurrence
+of REM.
+		<LIST>
+		
+Ia. Capitalize First Word
+According to the Batch command list on ss64, any occurrence of any command will
+trigger a replacement so long as said command has an IndexOf 0. Then, the command
+will be replaced with uppercase with .ToUpper().
+	EXAMPLE LINE: call test.cmd
+	EXAMPLE MODIFIED: CALL test.cmd
