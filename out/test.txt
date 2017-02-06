@@ -1,3 +1,4 @@
 -START-
 prInt hi REM print
+$t=H  $t=F
 -END-

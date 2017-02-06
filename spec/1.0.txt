@@ -18,7 +18,7 @@ or all-lowercase ONLY will be converted.
 	EXAMPLE LINE; print Hello REM This uses print command
 	EXAMPLE MODIFIED: ECHO Hello REM This uses print command
 	
-Spec 1.0 Replacements :
+Replacements :
 	-START-  => @ECHO OFF
 	-STARTX- => @ECHO off\r\nSETLOCAL ENABLEEXTENSIONS
 	-END-    => REM BatchX <version>
@@ -31,5 +31,5 @@ According to the Batch command list on ss64, any occurrence of any command will
 trigger a replacement so long as said command has an IndexOf 0. Then, the command
 will be replaced with uppercase with .ToUpper(). This is not yet implemented
 in version 1.0.0.
-	EXAMPLE LINE: call test.cmd
-	EXAMPLE MODIFIED: CALL test.cmd
+	EXAMPLE LINE: goto xxxx
+	EXAMPLE MODIFIED: GOTO xxxx

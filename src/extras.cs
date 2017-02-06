@@ -37,5 +37,18 @@ namespace BatchX {
 			}
 			return str;
 		}
+		
+		// Not REM replace
+		public static string NotREMReplace(string line, string find, string replace) {
+			string splitLine = "", splitLineRest = "";	
+			if ( line.IndexOf("REM") > -1 ) {
+				splitLine = line.Split(new string[]{"REM"},StringSplitOptions.None)[0];					
+				splitLineRest = "REM" + line.Split(new string[]{"REM"},StringSplitOptions.None)[1];					
+				} else {
+				splitLine = line;
+				splitLineRest = "";
+			}
+			return splitLine + splitLineRest;
+		}
 	}
 }

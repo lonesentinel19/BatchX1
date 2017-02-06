@@ -7,8 +7,10 @@ using static BatchX.extras;
 
 namespace BatchX {
 	class Commandler {
+		
 		public int cNum;
 		public string cLine;
+        public Dictionary<string, string> transpilerVariables = new Dictionary<string, string> { };
 		/* Gets important information regarding current line */
 		public Commandler(string line, int num) {
 			cNum = num;
@@ -77,6 +79,22 @@ namespace BatchX {
 				line = line.Replace(find, replace);
 			*/
 			//}
+			return line;
+		}
+		
+		/* TRANSPILER VARIABLES */
+		public string transpilerSet(string line) {
+			if ( line.IndexOf('$') > -1 ) {
+				string dollarSplit = line.Split('$')[1];
+				string key = dollarSplit.Split('=')[0];
+				string val = dollarSplit.Split('=')[1];
+				try {
+					transpilerVariables[key] = val;
+					line = "REM transpiler variable set";
+				} catch ( Exception e ) {
+					line = Error.Throw(3, cNum, e.ToString());
+				}
+			}
 			return line;
 		}
 	}
