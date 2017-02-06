@@ -4,14 +4,32 @@
 
 I. Basic Replacements
 The following strings will have the former set of characters replaced with the latter
-set of characters, so long as the index of REM is not 0. In Spec 1.0 we will not check
-all indexes of a certain occurrence and ensure that it is to the left of an occurrence
-of REM.
-		<LIST>
-		
+set of characters, so long as the location of the OBJECT TO REPLACE is to the left of
+the location of the string "REM". In the base Csharp version this is accomplished
+by splitting the line using the string "REM" as the delimiter, then replacing everything
+in line[0] and tacking on line[1] at the end. Additionally, the characters '#'
+and '//' must be converted to REM before these replacements can take place, so a
+pre-replace function may be required.
+
+Case sensitivity should be partial. For example, the word "print" and "PRINT" will
+be converted to "ECHO", but "prINt", "Print" and "prinT" would not. So either all-uppercas
+or all-lowercase ONLY will be converted.
+
+	EXAMPLE LINE; print Hello REM This uses print command
+	EXAMPLE MODIFIED: ECHO Hello REM This uses print command
+	
+Spec 1.0 Replacements :
+	-START-  => @ECHO OFF
+	-STARTX- => @ECHO off\r\nSETLOCAL ENABLEEXTENSIONS
+	-END-    => REM BatchX <version>
+	-ENDX-   => REM BatchX <version>
+	PRINT    => ECHO
+	IMPORT   => CALL
+	
 Ia. Capitalize First Word
 According to the Batch command list on ss64, any occurrence of any command will
 trigger a replacement so long as said command has an IndexOf 0. Then, the command
-will be replaced with uppercase with .ToUpper().
+will be replaced with uppercase with .ToUpper(). This is not yet implemented
+in version 1.0.0.
 	EXAMPLE LINE: call test.cmd
 	EXAMPLE MODIFIED: CALL test.cmd

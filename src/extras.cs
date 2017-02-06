@@ -27,5 +27,15 @@ namespace BatchX {
 				indexes.Add(index);
 			}
 		}
+		
+		// Change FIND to uppercase, then replace
+		public static string Replace(string str, string find, string replace) {
+			try {
+				str = str.Replace(find.ToUpper(), replace);
+			} catch ( Exception e ) {
+				// There is no Error.Throw available yet
+			}
+			return str;
+		}
 	}
 }

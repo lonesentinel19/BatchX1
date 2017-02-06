@@ -1,3 +1,3 @@
 @ECHO OFF
-ECHO hi REM print
+prInt hi REM print
 REM BatchX

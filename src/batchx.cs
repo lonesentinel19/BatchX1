@@ -10,6 +10,7 @@ namespace BatchX {
         public static string readFile { get; set; }
         public static string sversion = "1.0.0";
         public static int version = 100; 
+        public static int currentLine = 0; 
 		private static int threadSleep = 50; // in milliseconds
 
 		static void Main(string[] args) {
@@ -24,7 +25,7 @@ namespace BatchX {
 				fileIn = args[0];
 				fileOut = args[1];
 			} catch ( Exception e ) {				
-				Error.Throw(1);
+				Error.Throw(1, currentLine);
 			}
 			newFile = fileOut;
 			readFile = fileIn;
@@ -55,8 +56,9 @@ namespace BatchX {
         }
 
 		private static string modify(string line, int num) {
-			var Com = new Commandler();
+			var Com = new Commandler(line, num);
 			/* Replace basic strings first */
+			line = Com.preReplace(line);
 			line = Com.basicReplace(line);
 			
 			/* Capitalize first word of commands */
