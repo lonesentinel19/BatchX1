@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BatchX.extras;
+
 namespace BatchX {
 	class Commandler {
-		/* Replace basic strings, or otherwise capitalize them */
+		
+		/* This splits the line by the delimiter REM, if REM occurs in the
+		 * line. If so, then it splits and replaces everything BEFORE REM
+		 * with the desired replacement. Anything after REM is tacked on
+		 * in the return line. If REM does not occur, then it simply defaults
+		 * to using the variable line and does not split.
+		 */
 		public string basicReplace(string line) {
+			string splitLine = "", splitLineRest = "";	
 			Dictionary<string, int> occurences = new Dictionary<string, int> {};		
 			IDictionary<string, string> replacements = new Dictionary<string, string> {
 				{ "-START-", "@ECHO OFF"}, 
@@ -20,21 +29,22 @@ namespace BatchX {
 				//{ "for", "FOR" },
 				{ "in", "IN" }
 			};
-			
-			foreach (KeyValuePair<string, string> e in replacements)	{
-				occurences[e.Key] = 0;
+			if ( line.IndexOf("REM") > -1 ) {
+				splitLine = line.Split(new string[]{"REM"},StringSplitOptions.None)[0];					
+				splitLineRest = "REM" + line.Split(new string[]{"REM"},StringSplitOptions.None)[1];					
+				} else {
+				splitLine = line;
+				splitLineRest = "";
 			}
 			
-			foreach (KeyValuePair<string, string> e in replacements)	{
-				//if (extras.GetNthIndex(line, e.Key, occurences[e.Key]) > -1 && line.IndexOf("REM") != 0 )
-				if ( line.IndexOf("REM") !=0 && line.IndexOf(e.Key) > -1 )
+			foreach (KeyValuePair<string, string> e in replacements)	{				
+				if ( splitLine.IndexOf(e.Key) > -1 )
 				{
-					line = line.Replace(e.Key, e.Value);
-				}
-				//ocurrences[e.Key] += 1;
+					splitLine = splitLine.Replace(e.Key, e.Value);
+				}				
 			}
 			
-			return line;			
+			return splitLine + splitLineRest;			
 		}
 		
 		/* Typically, I don't condone muting exceptions. But this exception
@@ -44,14 +54,14 @@ namespace BatchX {
 		 * ss64 will be replaced, not just any string.
 		 */
 		public string capitalizeFirstWord(string line) {
-			string commands = new string[128];
-			foreach ( string command in commands ) { 
+			//string commands = new string[128];
+			//foreach ( string command in commands ) { 
 			/*
 				find = line.Split(' ')[0];
 				replace = line.Split(' ')[0].ToUpper();
 				line = line.Replace(find, replace);
 			*/
-			}
+			//}
 			return line;
 		}
 		
