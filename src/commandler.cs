@@ -126,7 +126,7 @@ namespace BatchX {
 				
 			foreach ( KeyValuePair<int,string> e in o4 ) {
 				string functionizerParam = e.Value.Substring(0, e.Value.Length - i + e.Key);
-				functionizer(functionizerParam, line);
+				line = functionizer(functionizerParam, line);
 			}
 			
 			return line;
@@ -135,12 +135,14 @@ namespace BatchX {
 		public string functionizer(string extract, string line) {
 			string name = extract.TrimEnd(')').Split('(')[0]; // we don't need final parentheses
 			string parameter = extract.TrimEnd(')').Split('(')[1];
+			
 			MethodInfo m = this.GetType().GetMethod(name);
-			m.Invoke(this, new string[] { parameter, line });
-			return extract;
+			string r = m.Invoke(this, new string[] { parameter, line }).ToString();
+
+			return r;
 		}
 		
-		public void arread(string param, string line){}
-		public void arrval(string param, string line){}
+		public string arread(string param, string line){return "arrval";}
+		public string arrval(string param, string line){return "";}
 	}
 }
