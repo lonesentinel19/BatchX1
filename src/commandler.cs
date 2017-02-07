@@ -97,5 +97,28 @@ namespace BatchX {
 			}
 			return line;
 		}
+		
+		public string functionReplace(string line) {
+			string[] functionList = new string[] { "arread", "arrval" };
+			Dictionary<int,string> oc = new Dictionary<int, string>{};
+			int i = 0;
+			
+			foreach ( string function in functionList ) {
+				List<int> o = extras.AllIndexesOf(line, function);
+				foreach ( int t in o ) {
+					oc[i] = function;
+					Console.WriteLine(oc[i]);
+					i++;
+				}
+				//i = 0;
+			}
+			var oc_list = oc.Keys.ToList();
+			oc_list.Sort();
+			
+			foreach ( var key in oc_list ) {
+				Console.WriteLine(key);
+			}
+			return line;
+		}
 	}
 }

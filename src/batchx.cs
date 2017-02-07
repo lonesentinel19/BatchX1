@@ -65,6 +65,8 @@ namespace BatchX {
 			line = Com.capitalizeFirstWord(line);
 			
 			line = Com.transpilerSet(line);
+			
+			line = Com.functionReplace(line);
             return line;
 		}
 

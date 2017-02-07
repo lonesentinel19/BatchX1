@@ -1,4 +1,3 @@
 @ECHO OFF
-prInt hi REM print
-$t=H  $t=F
+arread( arrval(t,arrval(k,1)))
 REM BatchX
