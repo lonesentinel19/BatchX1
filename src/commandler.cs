@@ -100,23 +100,26 @@ namespace BatchX {
 		
 		public string functionReplace(string line) {
 			string[] functionList = new string[] { "arread", "arrval" };
-			Dictionary<int,string> oc = new Dictionary<int, string>{};
 			int i = 0;
-			
+			Dictionary<int,string> oc = new Dictionary<int, string>{};
+			Dictionary<int,int> occ = new Dictionary<int, int>{};
+			Dictionary<int,int> o4 = new Dictionary<int, int>{};
+			List<int> c = extras.AllIndexesOf(line, ")");
 			foreach ( string function in functionList ) {
 				List<int> o = extras.AllIndexesOf(line, function);
 				foreach ( int t in o ) {
-					oc[i] = function;
-					Console.WriteLine(oc[i]);
+					oc[t] = function;
+					occ[t] = i;
 					i++;
 				}
 				//i = 0;
 			}
 			var oc_list = oc.Keys.ToList();
 			oc_list.Sort();
-			
+
 			foreach ( var key in oc_list ) {
-				Console.WriteLine(key);
+				Console.WriteLine(key + "-" + "-" + c[occ[key]]);
+				Console.WriteLine(line.Substring(key, Convert.ToInt32(c[occ[key]]) - key + occ[key]));
 			}
 			return line;
 		}
