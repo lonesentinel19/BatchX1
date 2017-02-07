@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 using static BatchX.extras;
 
 namespace BatchX {
@@ -98,13 +99,15 @@ namespace BatchX {
 			return line;
 		}
 		
+		/* Abandon all hope ye who enter here */
 		public string functionReplace(string line) {
 			string[] functionList = new string[] { "arread", "arrval" };
 			int i = 0;
 			Dictionary<int,string> oc = new Dictionary<int, string>{};
 			Dictionary<int,int> occ = new Dictionary<int, int>{};
-			Dictionary<int,int> o4 = new Dictionary<int, int>{};
+			SortedDictionary<int,string> o4 = new SortedDictionary<int,string>{};
 			List<int> c = extras.AllIndexesOf(line, ")");
+			
 			foreach ( string function in functionList ) {
 				List<int> o = extras.AllIndexesOf(line, function);
 				foreach ( int t in o ) {
@@ -112,16 +115,32 @@ namespace BatchX {
 					occ[t] = i;
 					i++;
 				}
-				//i = 0;
 			}
+
 			var oc_list = oc.Keys.ToList();
 			oc_list.Sort();
 
 			foreach ( var key in oc_list ) {
-				Console.WriteLine(key + "-" + "-" + c[occ[key]]);
-				Console.WriteLine(line.Substring(key, Convert.ToInt32(c[occ[key]]) - key + occ[key]));
+				o4[i-occ[key]] = line.Substring(key, Convert.ToInt32(c[occ[key]]) - key + (i-occ[key]));
 			}
+				
+			foreach ( KeyValuePair<int,string> e in o4 ) {
+				string functionizerParam = e.Value.Substring(0, e.Value.Length - i + e.Key);
+				functionizer(functionizerParam, line);
+			}
+			
 			return line;
 		}
+		
+		public string functionizer(string extract, string line) {
+			string name = extract.TrimEnd(')').Split('(')[0]; // we don't need final parentheses
+			string parameter = extract.TrimEnd(')').Split('(')[1];
+			MethodInfo m = this.GetType().GetMethod(name);
+			m.Invoke(this, new string[] { parameter, line });
+			return extract;
+		}
+		
+		public void arread(string param, string line){}
+		public void arrval(string param, string line){}
 	}
 }
