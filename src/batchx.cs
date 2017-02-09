@@ -57,6 +57,8 @@ namespace BatchX {
 
 		private static string modify(string line, int num) {
 			var Com = new Commandler(line, num);
+			int j = 0;
+			string[] allFunctionsArray = new string[32];
 			/* Replace basic strings first */
 			line = Com.preReplace(line);
 			line = Com.basicReplace(line);
@@ -65,8 +67,22 @@ namespace BatchX {
 			line = Com.capitalizeFirstWord(line);
 			
 			line = Com.transpilerSet(line);
+			string newLn = line;
+			int numFunctions = Com.getAllFunctions(line).Count();
+			SortedDictionary<int,string> allFunctions = Com.getAllFunctions(line);
 			
-			line = Com.functionReplace(line);
+			foreach ( KeyValuePair<int,string> e in allFunctions ) {
+				allFunctionsArray[j] = e.Value;
+				j++;
+			}
+			allFunctionsArray[j+1] = "";
+			
+			for ( int i = 0; i < numFunctions; i++ ) {
+				line = Com.functionizer(allFunctionsArray[i], line);
+				allFunctionsArray[i+1] = Com.functionizer(allFunctionsArray[i], allFunctionsArray[i+1]);
+				//Com.functionizer(allFunctionsArray[i], line);
+				}
+			
             return line;
 		}
 

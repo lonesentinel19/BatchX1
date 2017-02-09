@@ -12,6 +12,9 @@ namespace BatchX {
 		public int cNum;
 		public string cLine;
         public Dictionary<string, string> transpilerVariables = new Dictionary<string, string> { };
+		public int cI;
+		Method M = new Method();
+		
 		/* Gets important information regarding current line */
 		public Commandler(string line, int num) {
 			cNum = num;
@@ -100,16 +103,17 @@ namespace BatchX {
 		}
 		
 		/* Abandon all hope ye who enter here */
-		public string functionReplace(string line) {
+		public SortedDictionary<int,string> getAllFunctions(string line) {
 			string[] functionList = new string[] { "arread", "arrval" };
 			int i = 0;
+			string toReturn = "";
 			Dictionary<int,string> oc = new Dictionary<int, string>{};
 			Dictionary<int,int> occ = new Dictionary<int, int>{};
 			SortedDictionary<int,string> o4 = new SortedDictionary<int,string>{};
-			List<int> c = extras.AllIndexesOf(line, ")");
+			List<int> c = extras.AllIndexesOf(cLine, ")");
 			
 			foreach ( string function in functionList ) {
-				List<int> o = extras.AllIndexesOf(line, function);
+				List<int> o = extras.AllIndexesOf(cLine, function);
 				foreach ( int t in o ) {
 					oc[t] = function;
 					occ[t] = i;
@@ -121,28 +125,32 @@ namespace BatchX {
 			oc_list.Sort();
 
 			foreach ( var key in oc_list ) {
-				o4[i-occ[key]] = line.Substring(key, Convert.ToInt32(c[occ[key]]) - key + (i-occ[key]));
+				o4[i-occ[key]] = cLine.Substring(key, Convert.ToInt32(c[occ[key]]) - key + (i-occ[key]));
 			}
-				
+			/*
 			foreach ( KeyValuePair<int,string> e in o4 ) {
-				string functionizerParam = e.Value.Substring(0, e.Value.Length - i + e.Key);
-				line = functionizer(functionizerParam, line);
-			}
-			
-			return line;
-		}
-		
-		public string functionizer(string extract, string line) {
-			string name = extract.TrimEnd(')').Split('(')[0]; // we don't need final parentheses
-			string parameter = extract.TrimEnd(')').Split('(')[1];
-			
-			MethodInfo m = this.GetType().GetMethod(name);
-			string r = m.Invoke(this, new string[] { parameter, line }).ToString();
+				if ( e.Key == toGet ) {
+					toReturn = e.Value;
+				}
+			}*/
+			return o4;
+		}			
 
-			return r;
+		public string functionizer(string extract, string line) {
+			string r = String.Empty;
+			string name = extract.Split('(')[0];
+			return extract;
 		}
 		
-		public string arread(string param, string line){return "arrval";}
-		public string arrval(string param, string line){return "";}
+		public string arread(string param, string line) {
+			string[] args = M.ExtractParams("arread", param);
+			cLine = line.Replace(param, line);
+			return cLine;
+		}
+		
+		public string arrval(string param, string line) {
+			string[] args = M.ExtractParams("arread", param);
+			return line.Replace(param, args[0]);
+		}
 	}
 }
