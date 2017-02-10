@@ -67,21 +67,17 @@ namespace BatchX {
 			line = Com.capitalizeFirstWord(line);
 			
 			line = Com.transpilerSet(line);
-			string newLn = line;
-			int numFunctions = Com.getAllFunctions(line).Count();
-			SortedDictionary<int,string> allFunctions = Com.getAllFunctions(line);
 			
-			foreach ( KeyValuePair<int,string> e in allFunctions ) {
-				allFunctionsArray[j] = e.Value;
-				j++;
-			}
-			allFunctionsArray[j+1] = "";
-			
-			for ( int i = 0; i < numFunctions; i++ ) {
-				line = Com.functionizer(allFunctionsArray[i], line);
-				allFunctionsArray[i+1] = Com.functionizer(allFunctionsArray[i], allFunctionsArray[i+1]);
-				//Com.functionizer(allFunctionsArray[i], line);
+			if ( line.IndexOf('(') > -1 ) {
+				int numFunctions = Com.numOfFunctions(line);
+				int numFunctions2 = numFunctions;
+				int i;
+				for ( i = 1; i < numFunctions; i++ ) {
+					line = Com.newFunctionReplace(line, i, numFunctions2);
+					//allFunctionsArray[i+1] = Com.newFunctionReplace(allFunctionsArray[i+1], i);
+					numFunctions2--;
 				}
+			}
 			
             return line;
 		}

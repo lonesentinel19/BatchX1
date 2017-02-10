@@ -125,7 +125,7 @@ namespace BatchX {
 			oc_list.Sort();
 
 			foreach ( var key in oc_list ) {
-				o4[i-occ[key]] = cLine.Substring(key, Convert.ToInt32(c[occ[key]]) - key + (i-occ[key]));
+				o4[i-occ[key]] = cLine.Substring(key, Convert.ToInt32(c[occ[key]]) - key + (occ[key])-i);
 			}
 			/*
 			foreach ( KeyValuePair<int,string> e in o4 ) {
@@ -138,19 +138,74 @@ namespace BatchX {
 
 		public string functionizer(string extract, string line) {
 			string r = String.Empty;
-			string name = extract.Split('(')[0];
-			return extract;
+			if ( extract != "" && line != "" ) {
+				string name = extract.Split('(')[0];
+				MethodInfo m = this.GetType().GetMethod(name);
+				r = m.Invoke(this, new string[] { extract, line }).ToString();
+			}
+			return r;
 		}
 		
+		public int numOfFunctions(string line) {
+			List<int> AIOLeftP  = extras.AllIndexesOf(line, "(");
+			cI = AIOLeftP.Count();
+			return cI;
+		}
+		
+		public string newFunctionReplace(string line, int toGet, int antiToGet) {
+			string[] functionList = new string[] { "arread", "arrval", "tar" };
+			string parameters = "", functionName = "";
+			
+			int location = 0;
+			List<int> AIOLeftP  = extras.AllIndexesOf(line, "(");
+			List<int> AIORightP = extras.AllIndexesOf(line, ")");
+			
+			int first = AIOLeftP[cI-toGet];
+			int last = AIORightP[toGet-1];
+			
+			Console.WriteLine(first + "-" + last);
+			try {
+				parameters = line.Substring(first, last-first+1);
+				functionName = line.Substring(first-8, last-first+8);
+			} catch ( Exception e ) {}
+			
+			foreach ( string function in functionList ) {
+				try {
+					if ( line.IndexOf(function) > -1 ) { 
+						location = line.IndexOf(function + parameters);
+					}
+				} catch ( Exception e ) {
+					location = -1;
+				}
+			}
+			
+			if ( location >-1 ) {
+				string completeFunction = line.Substring(location, last-location+1).Replace("))", ")");
+				string callFunction = completeFunction.Split('(')[0];
+				
+				MethodInfo m = this.GetType().GetMethod(callFunction);
+				string r = m.Invoke(this, new string[] { completeFunction, line }).ToString();
+				
+				line = r;
+				//line = line.Replace(completeFunction, ">T<");
+			}
+			
+			return line;
+		}
+		public string tar(string param, string line ) { 
+			return line.Replace(param.Trim(), ""); 
+			}
+			
 		public string arread(string param, string line) {
 			string[] args = M.ExtractParams("arread", param);
-			cLine = line.Replace(param, line);
-			return cLine;
+			line = line.Replace(param.Trim(), args[0]);
+			return line;
 		}
 		
 		public string arrval(string param, string line) {
-			string[] args = M.ExtractParams("arread", param);
-			return line.Replace(param, args[0]);
+			string[] args = M.ExtractParams("arrval", param);
+			line = line.Replace(param.Trim(), args[0]);
+			return line;
 		}
 	}
 }

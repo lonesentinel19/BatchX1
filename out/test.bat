@@ -1,3 +1,3 @@
 @ECHO OFF
-arrval(k,1)))
+YOYO arread(t) YOYO
 REM BatchX
